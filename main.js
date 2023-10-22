@@ -298,7 +298,7 @@ function getActualHoursPerMonth(textFile, staffID, month) {
     if (hourf < 10) {
       hourf = "0" + hourf;
     }
-  } 
+  }
   if (minf < 10) {
     minf = "0" + minf;
   }
@@ -315,12 +315,79 @@ function getRequiredHoursPerMonth(
   id,
   month
 ) {
+  let hour = 0;
+  let min = 0;
+  let sec = 0;
   let text = fs.readFileSync(textFile, { encoding: "utf8", flag: "r" });
-  let line = text.split("\n").filter((line) => line != "");
-  let component = [];
-  for (let i = 1; i < line.length; i++) {
-    component[i] = line[i].split(",");
+  let rank = fs.readFileSync(rankFile, { encoding: "utf8", flag: "r" });
+  let textline = text.split("\n").filter((textline) => textline != "");
+  let textcomponent = [];
+  let rankline = rank.split("\n").filter((rankline) => rankline != "");
+  let rankcomponent = [];
+  let year, mth, day
+  let off;
+  let weekday;
+  const daysOfWeek = [
+    "Sunday",
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
+  let dayIndex;
+  for (let i = 0; i < textline.length; i++) {
+    textcomponent[i] = textline[i].split(",");
   }
+  for (let i = 0; i < rankline.length; i++) {
+    rankcomponent[i] = rankline[i].split(",");
+  }
+  for (let i = 0; i < rankline.length; i++) {
+    if (rankcomponent[i][0] == id) {
+      off = rankcomponent[i][1];
+    }
+  }
+  for (let i = 0; i < textline.length; i++) {
+    [year, mth, day] = textcomponent[i][2].split("-");
+    year=parseInt(year)
+    mth=parseInt(mth)
+    day=parseInt(day);
+    if (textcomponent[i][0] == id && month == mth) {
+      dayIndex = new Date(year, mth-1, day).getDay();
+      weekday = daysOfWeek[dayIndex];
+      if (weekday == off) {
+      } else if (
+        (year == 2023 && mth == 3 && day >= 23) ||
+        (year == 2023 && mth == 4 && day <= 24)
+      ) {
+        hour += 6;
+      } else {
+        hour += 8;
+        min += 24;
+      }
+      if (min >= 60) {
+        min = min % 60;
+        hour++;
+      }
+    }
+  }
+  for (let i = 0; i < permissionCount; i++) {
+    hour -= 2;
+  }
+  if (hour < 100) {
+    hour = "0" + hour;
+    if (hour < 10) {
+      hour = "0" + hour;
+    }
+  }
+  if (min < 10) {
+    min = "0" + min;
+  }
+  if (sec < 10) {
+    sec = "0" + sec;
+  }
+  return `${hour}:${min}:${sec}`;
 }
 
 function getNetSalaryPerMonth(id, actualHours, requiredHours, rankFile) {}

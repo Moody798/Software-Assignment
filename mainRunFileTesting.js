@@ -39,8 +39,9 @@ let staffObj = {
   lastOut: "04:47:55 pm ",
 };
 console.log(addRecord("./staff.txt", staffObj));
-setPermission("./staff.txt","10000367","2023-06-01",true)
-let s="2023-06-01"
-console.log(s.slice(5,7));
-console.log(countPermissionPerMonth("./staff.txt" , "10009501" , "06"));
-console.log(getActualHoursPerMonth("./staff.txt" , "10009501" , "06"))
+setPermission("./staff.txt", "10000367", "2023-06-01", true);
+let s = "2023-06-01";
+console.log(s.slice(5, 7));
+console.log(countPermissionPerMonth("./staff.txt", "10009501", "06"));
+console.log(getActualHoursPerMonth("./staff.txt", "10009501", "06"));
+console.log(getRequiredHoursPerMonth("./staff.txt", "./rank.txt", 0, "10002417", 5));
