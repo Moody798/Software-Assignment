@@ -77,14 +77,14 @@ function getWastedHours(FirstIn, LastOut) {
   let wasteh2 = 0;
   let wastem2 = 0;
   let wastes2 = 0;
-  if (hour2 > 19) {
+  if (hour2 > 19||hour2==19&&(min2>0||sec2>0)) {
     wasteh2 = hour2 - 19;
     wastem2 += min2;
     wastes2 += sec2;
   }
-  wastehf = wasteh1 + wasteh2;
-  wastemf = wastem1 + wastem2;
-  wastesf = wastes1 + wastes2;
+  let wastehf = wasteh1 + wasteh2;
+  let wastemf = wastem1 + wastem2;
+  let wastesf = wastes1 + wastes2;
   if (wastesf >= 60) {
     wastesf = wastesf % 60;
     wastemf++;

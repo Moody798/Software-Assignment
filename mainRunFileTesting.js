@@ -14,8 +14,8 @@ const {
 // don't remove the above code
 // You need the above code to use your implemented functions from main.js
 // You can test here your implemented functions from main.js
-console.log(getDuration("06:55:55 am", "04:47:55 pm"));
-console.log(getWastedHours("5:46:55 am", "9:47:45 pm"));
+// console.log(getDuration("06:55:55 am", "04:47:55 pm"));
+console.log(getWastedHours("1:30:30 pm", "7:26:20 pm"));
 console.log(getWastedHours("6:07:55 am", "9:47:55 pm"));
 console.log(
   getActualHours(
