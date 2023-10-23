@@ -1,4 +1,5 @@
 // don't remove the below code
+const { arrayBuffer } = require("stream/consumers");
 const {
   getDuration,
   getWastedHours,
@@ -31,14 +32,14 @@ let x = fs
   .readFileSync("./staffUpdated.txt", { encoding: "utf8", flag: "r" })
   .split("\n");
 console.log(x[0]);
-let staffUpdatedObj = {
-  id: "10000367",
-  name: "mohamed",
-  date: "2023-06-01",
-  firstIn: "06:55:55 am",
-  lastOut: "04:47:55 pm ",
+let staffObj = {
+  id: "10002417",
+  name: "Alaa Ashraf",
+  date: "2023-04-16",
+  firstIn: "06:32:26 am",
+  lastOut: "07:26:20 pm",
 };
-console.log(addRecord("./staffUpdated.txt", staffUpdatedObj));
+console.log(addRecord("./staffUpdated.txt", staffObj));
 setPermission("./staffUpdated.txt", "10000367", "2023-06-01", true);
 let s = "2023-06-01";
 console.log(s.slice(5, 7));
@@ -46,3 +47,10 @@ console.log(countPermissionPerMonth("./staffUpdated.txt", "10009501", "06"));
 console.log(getActualHoursPerMonth("./staffUpdated.txt", "10009501", "06"));
 console.log(getRequiredHoursPerMonth("./staffUpdated.txt", "./staffRank.txt", 0, "10002417", 5));
 console.log( "net salary is " , getNetSalaryPerMonth ("10009512","146:20:00","168: 00:00","./staffRank.txt") )
+
+
+
+
+
+
+

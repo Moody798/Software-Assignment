@@ -77,7 +77,7 @@ function getWastedHours(FirstIn, LastOut) {
   let wasteh2 = 0;
   let wastem2 = 0;
   let wastes2 = 0;
-  if (hour2 > 19||hour2==19&&(min2>0||sec2>0)) {
+  if (hour2 > 19 || (hour2 == 19 && (min2 > 0 || sec2 > 0))) {
     wasteh2 = hour2 - 19;
     wastem2 += min2;
     wastes2 += sec2;
@@ -167,15 +167,6 @@ function isFullTime(date, actualCalulatedHours) {
 function addRecord(textFile, staffObj) {
   let text = fs.readFileSync(textFile, { encoding: "utf8", flag: "r" });
   let line = text.split("\n").filter((line) => line != "");
-  let component = [];
-  for (let i = 1; i < line.length; i++) {
-    component[i] = line[i].split(",");
-  }
-  for (let i = 1; i < line.length; i++) {
-    if (component[i][0] == staffObj.id && component[i][2] == staffObj.date) {
-      return {};
-    }
-  }
   let object = {
     ID: staffObj.id,
     Name: staffObj.name,
@@ -197,15 +188,37 @@ function addRecord(textFile, staffObj) {
     ),
     HasPermission: false,
   };
-  // let object_string =
-  //   text +
-  //   `\n${object.ID},${object.Name},${object.date},${object.FirstIn},${object.LastOut},${object.Duration},${object.WastedHours},${object.ActualHours},${object.FullTime},${object.HasPermission}`;
-  // fs.writeFileSync(textFile, object_string);
+  let component = [];
+  let newline = `${object.ID},${object.Name},${object.date},${object.FirstIn},${object.LastOut},${object.Duration},${object.WastedHours},${object.ActualHours},${object.FullTime},${object.HasPermission}`;
+  let Ids = [];
+  for (let i = 0; i < line.length; i++) {
+    component[i] = line[i].split(",");
+  }
   for (let i = 0; i < line.length; i++) {
     if (component[i][0] == staffObj.id && component[i][2] == staffObj.date) {
       return {};
     }
+    Ids.push(component[i][0]);
   }
+  let index = Ids.lastIndexOf(object.ID);
+  if (index !== -1) {
+    line.splice(index + 1, 0, newline);
+    for (let i = 0; i < line.length; i++) {
+      component[i] = line[i].split(",");
+    }
+    let components = `${component[0][0]},${component[0][1]},${component[0][2]},${component[0][3]},${component[0][4]},${component[0][5]},${component[0][6]},${component[0][7]},${component[0][8]},${component[0][9]}`;
+    fs.writeFileSync(textFile, components);
+    for (let i = 1; i < line.length; i++) {
+      let components =
+        fs.readFileSync(textFile, { encoding: "utf8", flag: "r" }) +
+        `\n${component[i][0]},${component[i][1]},${component[i][2]},${component[i][3]},${component[i][4]},${component[i][5]},${component[i][6]},${component[i][7]},${component[i][8]},${component[i][9]}`;
+      fs.writeFileSync(textFile, components);
+    }
+  } else {
+    let object_string = text + `\n${newline}`;
+    fs.writeFileSync(textFile, object_string);
+  }
+  console.log(index);
   return object;
 }
 
@@ -442,9 +455,9 @@ function getNetSalaryPerMonth(id, actualHours, requiredHours, rankFile) {
     minf = 60 + minf;
     hourf--;
   }
-  
+
   if (hourf - allowedHours <= hour2) {
-    salary -= deductionRatePerHour * (hourf-allowedHours);
+    salary -= deductionRatePerHour * (hourf - allowedHours);
   }
   return salary;
 }
