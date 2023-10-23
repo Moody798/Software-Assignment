@@ -197,10 +197,15 @@ function addRecord(textFile, staffObj) {
     ),
     HasPermission: false,
   };
-  let object_string =
-    text +
-    `\n${object.ID},${object.Name},${object.date},${object.FirstIn},${object.LastOut},${object.Duration},${object.WastedHours},${object.ActualHours},${object.FullTime},${object.HasPermission}`;
-  fs.writeFileSync(textFile, object_string);
+  // let object_string =
+  //   text +
+  //   `\n${object.ID},${object.Name},${object.date},${object.FirstIn},${object.LastOut},${object.Duration},${object.WastedHours},${object.ActualHours},${object.FullTime},${object.HasPermission}`;
+  // fs.writeFileSync(textFile, object_string);
+  for (let i = 0; i < line.length; i++) {
+    if (component[i][0] == staffObj.id && component[i][2] == staffObj.date) {
+      return {};
+    }
+  }
   return object;
 }
 
