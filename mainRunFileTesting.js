@@ -45,3 +45,4 @@ console.log(s.slice(5, 7));
 console.log(countPermissionPerMonth("./staff.txt", "10009501", "06"));
 console.log(getActualHoursPerMonth("./staff.txt", "10009501", "06"));
 console.log(getRequiredHoursPerMonth("./staff.txt", "./rank.txt", 0, "10002417", 5));
+console.log( "net salary is " , getNetSalaryPerMonth ("10009512","146:20:00","168: 00:00","./rank.txt") )

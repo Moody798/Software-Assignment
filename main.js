@@ -324,7 +324,7 @@ function getRequiredHoursPerMonth(
   let textcomponent = [];
   let rankline = rank.split("\n").filter((rankline) => rankline != "");
   let rankcomponent = [];
-  let year, mth, day
+  let year, mth, day;
   let off;
   let weekday;
   const daysOfWeek = [
@@ -350,11 +350,11 @@ function getRequiredHoursPerMonth(
   }
   for (let i = 0; i < textline.length; i++) {
     [year, mth, day] = textcomponent[i][2].split("-");
-    year=parseInt(year)
-    mth=parseInt(mth)
-    day=parseInt(day);
+    year = parseInt(year);
+    mth = parseInt(mth);
+    day = parseInt(day);
     if (textcomponent[i][0] == id && month == mth) {
-      dayIndex = new Date(year, mth-1, day).getDay();
+      dayIndex = new Date(year, mth - 1, day).getDay();
       weekday = daysOfWeek[dayIndex];
       if (weekday == off) {
       } else if (
@@ -390,7 +390,59 @@ function getRequiredHoursPerMonth(
   return `${hour}:${min}:${sec}`;
 }
 
-function getNetSalaryPerMonth(id, actualHours, requiredHours, rankFile) {}
+function getNetSalaryPerMonth(id, actualHours, requiredHours, rankFile) {
+  let rank = fs.readFileSync(rankFile, { encoding: "utf8", flag: "r" });
+  let rankline = rank.split("\n").filter((rankline) => rankline != "");
+  let rankcomponent = [];
+  let r;
+  let salary;
+  let deductionRatePerHour;
+  let allowedHours;
+  let [hour1, min1, sec1] = actualHours.split(":");
+  let [hour2, min2, sec2] = requiredHours.split(":");
+  for (let i = 0; i < rankline.length; i++) {
+    rankcomponent[i] = rankline[i].split(",");
+  }
+  for (let i = 0; i < rankline.length; i++) {
+    if (rankcomponent[i][0] == id) {
+      r = rankcomponent[i][3];
+      salary = rankcomponent[i][2];
+    }
+  }
+  deductionRatePerHour = Math.floor(salary / 185);
+
+  if (r == 1) {
+    allowedHours = 50;
+  } else if (r == 2) {
+    allowedHours = 20;
+  } else if (r == 3) {
+    allowedHours = 10;
+  } else if (r == 4) {
+    allowedHours = 3;
+  }
+  hour1 = parseInt(hour1);
+  min1 = parseInt(min1);
+  sec1 = parseInt(sec1);
+  hour2 = parseInt(hour2);
+  min2 = parseInt(min2);
+  sec2 = parseInt(sec2);
+  let secf = sec2 - sec1;
+  let minf = min2 - min1;
+  let hourf = hour2 - hour1;
+  if (secf < 0) {
+    secf = 60 + secf;
+    minf--;
+  }
+  if (minf < 0) {
+    minf = 60 + minf;
+    hourf--;
+  }
+  
+  if (hourf - allowedHours <= hour2) {
+    salary -= deductionRatePerHour * (hourf-allowedHours);
+  }
+  return salary;
+}
 
 module.exports = {
   getDuration,
